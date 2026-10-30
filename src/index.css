@@ -1,0 +1,485 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 100% 97%;
+    --foreground: 17 38% 13%;
+    --card: 40 60% 98%;
+    --card-foreground: 17 38% 13%;
+    --popover: 40 100% 98%;
+    --popover-foreground: 17 38% 13%;
+    --primary: 32 95% 44%;
+    --primary-foreground: 40 100% 97%;
+    --secondary: 26 29% 53%;
+    --secondary-foreground: 40 100% 97%;
+    --muted: 34 44% 90%;
+    --muted-foreground: 22 24% 34%;
+    --accent: 34 72% 78%;
+    --accent-foreground: 17 38% 13%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 40 100% 97%;
+    --border: 30 34% 85%;
+    --input: 30 30% 80%;
+    --ring: 32 95% 44%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 1.15rem;
+    --font-heading: "Dela Gothic One", "Arial Black", ui-sans-serif, system-ui, sans-serif;
+    --font-body: "Outfit", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Dela Gothic One", "Arial Black", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* BUCHI LOVE palette */
+    --cacao: #2b1a11;
+    --cacao-deep: #1f1109;
+    --caramel: #a9691f;
+    --amber-glaze: #d97706;
+    --golden-tan: #d7a860;
+    --toasted: #a97a4e;
+    --cream: #fffbf2;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+    background-color: var(--cream);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* clip (not hidden) so the pinned split section can stick to the viewport */
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--amber-glaze);
+    color: var(--cream);
+  }
+}
+
+@layer utilities {
+  /* The frying spectrum: dark cacao at the top, crisping to golden as you scroll. */
+  .fry-gradient {
+    background-image: linear-gradient(
+      180deg,
+      #2b1a11 0%,
+      #35200f 12%,
+      #472a18 26%,
+      #6b4526 40%,
+      #93663a 54%,
+      #b78a4e 68%,
+      #d3a55f 80%,
+      #e4c286 91%,
+      #f0d9ae 100%
+    );
+  }
+
+  .grain-overlay {
+    background-image: radial-gradient(rgba(255, 251, 242, 0.09) 1px, transparent 1px);
+    background-size: 4px 4px;
+  }
+
+  .sizzle-glow {
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 196, 92, 0.55) 0%,
+      rgba(217, 119, 6, 0.34) 42%,
+      rgba(217, 119, 6, 0) 72%
+    );
+    filter: blur(18px);
+    animation: sizzle-breathe 6s ease-in-out infinite;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 42px rgba(255, 186, 84, 0.38), 0 2px 0 rgba(60, 26, 6, 0.4);
+  }
+
+  .hero-parallax {
+    will-change: transform;
+  }
+
+  .buchi-card {
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.55s ease;
+  }
+  .buchi-card:hover {
+    transform: translateY(-8px) rotate(-0.6deg);
+    box-shadow: 0 30px 60px -28px rgba(43, 26, 17, 0.55);
+  }
+  .buchi-card:hover .buchi-photo {
+    transform: scale(1.07) rotate(4deg);
+  }
+  .buchi-photo {
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .buchi-card:hover .card-glow {
+    opacity: 1;
+  }
+  .card-glow {
+    opacity: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(255, 186, 84, 0.5), transparent 68%);
+    transition: opacity 0.5s ease;
+  }
+
+  /* ---------- split reveal ---------- */
+  .split-section {
+    --split: 0;
+    --copy: 0;
+    --splash: 0;
+    --flavors: 0;
+  }
+  .split-stage-open {
+    --split: 1;
+    --copy: 1;
+  }
+  .split-splash {
+    opacity: var(--splash, 0);
+    transform:
+      translate(-50%, -50%)
+      scale(calc(0.58 + var(--splash, 0) * 0.42))
+      rotate(calc((1 - var(--splash, 0)) * -8deg));
+    transform-origin: center;
+    will-change: opacity, transform;
+  }
+  .split-flavors {
+    opacity: var(--flavors, 0);
+    transform:
+      translate(-50%, -50%)
+      scale(calc(0.58 + var(--flavors, 0) * 0.42))
+      rotate(calc((1 - var(--flavors, 0)) * 8deg));
+    transform-origin: center;
+    will-change: opacity, transform;
+  }
+  .split-glow {
+    background: radial-gradient(
+      circle,
+      rgba(255, 196, 92, 0.45) 0%,
+      rgba(217, 119, 6, 0.2) 44%,
+      rgba(217, 119, 6, 0) 72%
+    );
+    opacity: calc(0.55 + var(--split) * 0.45);
+  }
+  .buchi-shadow {
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0) 70%);
+    opacity: calc(0.45 + var(--split) * 0.35);
+  }
+  .split-copy {
+    opacity: var(--copy);
+    transform: translateY(calc((1 - var(--copy)) * 18px));
+    pointer-events: none;
+    will-change: opacity, transform;
+  }
+  .split-pin.is-open .split-copy,
+  .split-stage-open .split-copy {
+    pointer-events: auto;
+  }
+  .split-hint {
+    opacity: calc(1 - var(--split) * 2.2);
+  }
+}
+
+/* ---------- frying motion ---------- */
+@keyframes sizzle-breathe {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translate3d(0, 12vh, 0) scale(0.6);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--bubble-opacity, 0.55);
+  }
+  70% {
+    opacity: var(--bubble-opacity, 0.55);
+  }
+  100% {
+    transform: translate3d(var(--bubble-drift, 18px), -96vh, 0) scale(1.05);
+    opacity: 0;
+  }
+}
+
+.bubble {
+  position: absolute;
+  bottom: -8vh;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 32% 30%, rgba(255, 245, 214, 0.85), rgba(255, 197, 102, 0.16) 55%, rgba(255, 197, 102, 0) 72%);
+  border: 1px solid rgba(255, 220, 160, 0.28);
+  box-shadow: inset 0 0 8px rgba(255, 230, 180, 0.28);
+  animation: bubble-rise linear infinite;
+  pointer-events: none;
+}
+
+@keyframes float-bob {
+  0%,
+  100% {
+    transform: translateY(-8px) rotate(-1.2deg);
+  }
+  50% {
+    transform: translateY(10px) rotate(1.2deg);
+  }
+}
+.float-bob {
+  animation: float-bob 9s ease-in-out infinite;
+}
+
+@keyframes splatter-pop {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.2);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx, 20px), var(--ty, -20px)) scale(1);
+  }
+}
+
+.splatter-dot {
+  position: absolute;
+  border-radius: 9999px;
+  background: #ffcd6b;
+  box-shadow: 0 0 10px rgba(255, 186, 84, 0.9);
+  opacity: 0;
+  pointer-events: none;
+}
+.group\/splatter:hover .splatter-dot,
+.group\/splatter:focus-visible .splatter-dot {
+  animation: splatter-pop 0.62s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+@keyframes steam-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.7);
+  }
+  35% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--steam-drift, 8px), -78px, 0) scale(1.15);
+  }
+}
+
+.steam {
+  position: absolute;
+  bottom: 0;
+  width: 13px;
+  height: 104px;
+  border-radius: 9999px;
+  background: linear-gradient(to top, rgba(255, 240, 214, 0.6), rgba(255, 240, 214, 0));
+  filter: blur(7px);
+  transform-origin: bottom center;
+  animation: steam-rise 3.6s ease-in-out infinite;
+  opacity: 0;
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-drop {
+  opacity: 0;
+  transform: translateY(-64px) rotate(-9deg) scale(0.94);
+  transition: opacity 0.7s ease, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.reveal-drop.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-roll {
+  opacity: 0;
+  transform: translateX(-56px) rotate(-18deg);
+  transition: opacity 0.7s ease, transform 1s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.reveal-roll.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal,
+  .reveal-drop,
+  .reveal-roll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .bubble,
+  .float-bob,
+  .steam,
+  .sizzle-glow {
+    animation: none !important;
+  }
+  .buchi-card:hover {
+    transform: none;
+  }
+}
+
+/* ---------- cream poured behind the page ---------- */
+.cream-float {
+  position: absolute;
+  transform: translate3d(0, calc(var(--cream-shift, 0px) * var(--depth, 0.4) * -1), 0);
+  will-change: transform;
+}
+.cream-melt {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  filter: blur(62px);
+  animation: cream-melt 30s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes cream-melt {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(3%, -5%, 0) scale(1.14) rotate(10deg);
+  }
+  100% {
+    transform: translate3d(-5%, 4%, 0) scale(0.92) rotate(-8deg);
+  }
+}
+
+/* ---------- crispy details ---------- */
+.sizzle-spark {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #fffaea, #ffc45c 72%);
+  box-shadow: 0 0 10px rgba(255, 196, 92, 0.95), 0 0 20px rgba(255, 152, 32, 0.45);
+  opacity: 0;
+  pointer-events: none;
+}
+.buchi-card:hover .sizzle-spark,
+.sizzle-host:hover .sizzle-spark {
+  animation: sizzle-pop 0.9s ease-out forwards;
+}
+
+@keyframes sizzle-pop {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.4);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--sx, 10px), var(--sy, -24px), 0) scale(1.05);
+  }
+}
+
+.photo-sheen {
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    rgba(255, 247, 224, 0.5) 46%,
+    rgba(255, 206, 138, 0.22) 56%,
+    transparent 74%
+  );
+  opacity: 0;
+  transform: translateX(-120%);
+  transition: opacity 0.35s ease;
+}
+.buchi-card:hover .photo-sheen {
+  opacity: 1;
+  animation: shimmer-sweep 1.15s ease-out;
+}
+
+.flavor-name {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff3d6;
+  text-shadow: 0 2px 14px rgba(24, 12, 4, 0.7);
+  opacity: 0;
+  transform: translateY(7px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.flavor-name.is-active {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 640px) {
+  .cream-melt {
+    filter: blur(34px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cream-melt {
+    animation: none !important;
+  }
+  .cream-float {
+    transform: none !important;
+  }
+  .sizzle-spark {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  .photo-sheen {
+    display: none;
+  }
+  .flavor-name {
+    transition: none !important;
+    transform: none !important;
+  }
+}

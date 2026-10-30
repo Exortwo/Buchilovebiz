@@ -1,0 +1,58 @@
+{
+  "name": "BuchiFlavor",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Flavor name shown on the menu card, e.g. Ube Halaya"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of the filling shown on the card"
+    },
+    "price": {
+      "type": "number",
+      "description": "Price per piece in pesos"
+    },
+    "image": {
+      "type": "string",
+      "description": "Photo of this buchi (leave empty to use the default photo)"
+    },
+    "tag": {
+      "type": "string",
+      "description": "Small badge on the card, e.g. Best seller or New"
+    },
+    "sort_order": {
+      "type": "number",
+      "description": "Menu order, lowest first"
+    },
+    "available": {
+      "type": "boolean",
+      "default": true,
+      "description": "Uncheck to hide this flavor from the menu"
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "price"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

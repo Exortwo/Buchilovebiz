@@ -1,0 +1,66 @@
+{
+  "name": "BuchiOrder",
+  "type": "object",
+  "properties": {
+    "customer_name": {
+      "type": "string",
+      "description": "Name of the person ordering"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Mobile number used to confirm the order"
+    },
+    "flavor": {
+      "type": "string",
+      "description": "Flavor or mixed box chosen"
+    },
+    "quantity": {
+      "type": "string",
+      "description": "Number of boxes of six"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Pickup time, delivery area, allergies"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "confirmed",
+        "completed",
+        "cancelled"
+      ],
+      "default": "new",
+      "description": "Where the order is in the kitchen queue"
+    }
+  },
+  "required": [
+    "customer_name",
+    "phone"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
